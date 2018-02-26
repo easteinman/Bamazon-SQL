@@ -1,0 +1,23 @@
+{
+  "name": "bamazon-sql",
+  "version": "1.0.0",
+  "description": "A storefront where a user can purchase several products",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericsteinman/Bamazon-SQL.git"
+  },
+  "author": "Eric",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ericsteinman/Bamazon-SQL/issues"
+  },
+  "homepage": "https://github.com/ericsteinman/Bamazon-SQL#readme",
+  "dependencies": {
+    "inquirer": "^5.1.0",
+    "mysql": "^2.15.0"
+  }
+}
