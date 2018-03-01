@@ -2,7 +2,7 @@ var mysql = require("mysql");
 var prompt = require('prompt');
 var Table = require('cli-table');
 
-// Connection information for the sql database
+// Connection information for the SQL database
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -11,22 +11,22 @@ var connection = mysql.createConnection({
   user: "root",
 
   // My password
-  password: "09060108",
+  password: "password",
   database: "bamazon_db"
 });
 
-// Connect to the mysql server and sql database
+// Connect to the mysql server and SQL database
 connection.query("SELECT * FROM products", function(err, res) {
   if (err) throw err;
-  // run the start function after the connection is made to prompt the user
 
-  // Show User message
-  console.log('Welcome to Bamazon! We have a wide variety of products, you are sure to find something you will like.....\n');
+  // Display a welcome message to the user.
+  console.log('Welcome to Bamazon! We have a wide variety of products, you are sure to find something you will like.....');
 
+  // Used the 'cli-table' package to generate a table with the SQL database information
   var table = new Table({
     head: ['Item ID', 'Product ID', 'Department Name', 'Price', 'Stock Quantity']
-  , colWidths: [10, 40, 20, 10, 20]
-});
+    , colWidths: [10, 40, 20, 10, 20]
+  });
     // Push all of the variables to the table
     table.push(
         [res[0].item_id, res[0].product_name, res[0].department_name, '$' + res[0].price, res[0].stock_quantity]
@@ -53,26 +53,28 @@ connection.query("SELECT * FROM products", function(err, res) {
 
     // Displays the table to the user
     console.log(table.toString());
+    // Call the start function after the table has been generated
     start();
 });
 
-// function which prompts the user for the item and quantity desired
+// Function which starts the prompt
 function start() {
+  // Prompy begins the purchase process
   prompt.start();
     // Ask the user for the ID of the item they would like to purchase
-    console.log('Which of our items would you like to purchase?');
+    console.log("Which of our items would you like to purchase?");
 
     // Prompt user
-    prompt.get(['desiredItemID'], function (err, result) {
+    prompt.get(["desiredItemID"], function (err, result) {
             
       // Store the result in a variable
       var desiredItemID = result.desiredItemID
 
     // Then ask the user the quantity they would like
-    console.log('How many would you like to purchase?')
+    console.log("How many would you like to purchase?")
 
     // Prompt user
-    prompt.get(['desiredItemQuantity'], function (err, result) {
+    prompt.get(["desiredItemQuantity"], function (err, result) {
 
       // Store the result in a variable
       var desiredItemQuantity = result.desiredItemQuantity;
@@ -81,25 +83,54 @@ function start() {
       connection.query("SELECT stock_quantity FROM products WHERE ?", [{item_id: desiredItemID}], function(err, results) {
 
         if (err) throw err;
-        // Checks to see if the item the entered exists/is definied
+        // Checks to see if the item entered doesn't exist/is undefinied. If so, inform the user and end the server connection.
         if (results[0] == undefined){
+            console.log("==========================================================");
+
             console.log("Sorry...looks like Item ID " + desiredItemID + " does not exist. Feel free to come back if you would like to try and purchase something else.");
-            // End connection.
+            // End the connection
             connection.end();
         }
 
         else {
-          var bamazonStockQuantity = results[0];
+          // Set the current quantity in stock to the SQL stock_quantity for the item
+          var bamazonStockQuantity = results[0].stock_quantity;
           // Check to see that we have enough in stock to sell
+          if (bamazonStockQuantity < desiredItemQuantity){
+            console.log("==========================================================");
+
+            console.log("Sorry...looks like we don't have enough of this product in stock to meet your request. Feel free to come back if you would like to purchase a lower amount or something else altogether. Bye!");
+            // End connection.
+            connection.end();
+          }
+          // If the current stock is equal to or less than the desired quantity we continue with the transaction
           if (bamazonStockQuantity >= desiredItemQuantity){
-            // Update SQL DB with new quantity
+            // Start by updating the SQL DB with new quantity
+            // Create a new variable with the new quantity of the prodict in stock
             var newQuantity = parseInt(bamazonStockQuantity) - parseInt(desiredItemQuantity);
-
-            console.log(newQuantity);
-
-            connection.query('UPDATE products SET ? WHERE ?', [{stock_quantity: newQuantity}, {item_id: desiredItemID}], function(err, results){
-              if(err) throw err; // Error Handler
+            // Update stock quantity in SQL DB with the new quantity, finding in SQL DB with the item_id
+            connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: newQuantity}, {item_id: desiredItemID}], function(err, results){
+              if(err) throw err;
             }); // End of quantity update
+
+            // Next we need to inform the user of their purchase total
+            // Create a variable for the total $ of the purchase
+            var purchaseTotal;
+            // Grab the price from the SQL DB
+            connection.query("SELECT price FROM products WHERE ?", [{item_id: desiredItemID}], function(err, results){
+                // Create a variable to hold that price
+                var desiredItemPrice = results[0].price;
+                // Equation to calulate the purchase total
+                purchaseTotal = desiredItemPrice * desiredItemQuantity;
+
+                console.log("==========================================================");
+
+                console.log("Your total for this purchase is $" + purchaseTotal + ". Thanks for visiting your local Bamazon!");
+
+                // Ends the server connection
+                connection.end();
+              }); // End of Price inquiry for total cost
+
           }
         }
 
