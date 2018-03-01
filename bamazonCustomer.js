@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
   user: "root",
 
   // My password
-  password: "",
+  password: "09060108",
   database: "bamazon_db"
 });
 
@@ -58,21 +58,52 @@ connection.query("SELECT * FROM products", function(err, res) {
 
 // function which prompts the user for the item and quantity desired
 function start() {
-    prompt.start();
-        // Ask for Item ID
-        console.log('\nWhich of our items would you like to purchase?');
-        prompt.get(['desiredItemID'], function (err, result) {
-            var desiredItemID = result.desiredItemID
+  prompt.start();
+    // Ask the user for the ID of the item they would like to purchase
+    console.log('Which of our items would you like to purchase?');
 
-            // Then ask for Quanity (once user completed first entry)
-            console.log('\nHow many would you like to purchase?')
-            prompt.get(['desiredItemQuantity'], function (err, result) {
-            // Show quantity selected
-            var desiredItemQuantity = result.desiredItemQuantity;
+    // Prompt user
+    prompt.get(['desiredItemID'], function (err, result) {
+            
+      // Store the result in a variable
+      var desiredItemID = result.desiredItemID
 
-            connection.query("SELECT * FROM products", function(err, results) {
-                if (err) throw err;
-            });
-        });
-    });
-}
+    // Then ask the user the quantity they would like
+    console.log('How many would you like to purchase?')
+
+    // Prompt user
+    prompt.get(['desiredItemQuantity'], function (err, result) {
+
+      // Store the result in a variable
+      var desiredItemQuantity = result.desiredItemQuantity;
+
+      // Check our SQL databse to see if we have enough in stock for the user to purchase.
+      connection.query("SELECT stock_quantity FROM products WHERE ?", [{item_id: desiredItemID}], function(err, results) {
+
+        if (err) throw err;
+        // Checks to see if the item the entered exists/is definied
+        if (results[0] == undefined){
+            console.log("Sorry...looks like Item ID " + desiredItemID + " does not exist. Feel free to come back if you would like to try and purchase something else.");
+            // End connection.
+            connection.end();
+        }
+
+        else {
+          var bamazonStockQuantity = results[0];
+          // Check to see that we have enough in stock to sell
+          if (bamazonStockQuantity >= desiredItemQuantity){
+            // Update SQL DB with new quantity
+            var newQuantity = parseInt(bamazonStockQuantity) - parseInt(desiredItemQuantity);
+
+            console.log(newQuantity);
+
+            connection.query('UPDATE products SET ? WHERE ?', [{stock_quantity: newQuantity}, {item_id: desiredItemID}], function(err, results){
+              if(err) throw err; // Error Handler
+            }); // End of quantity update
+          }
+        }
+
+      }) // End of SQL database inquiry
+    }); // End of Quantity prompt
+    }); // End of Item ID prompt
+} // End of start function
