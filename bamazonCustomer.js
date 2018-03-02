@@ -27,7 +27,7 @@ connection.query("SELECT * FROM products", function(err, res) {
     head: ['Item ID', 'Product ID', 'Department Name', 'Price', 'Stock Quantity']
     , colWidths: [10, 40, 20, 10, 20]
   });
-    // Push all of the variables to the table
+    // Push all of the SQL info to the table
     table.push(
         [res[0].item_id, res[0].product_name, res[0].department_name, '$' + res[0].price, res[0].stock_quantity]
 
