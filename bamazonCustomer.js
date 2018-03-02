@@ -1,5 +1,5 @@
+var inquirer = require("inquirer");
 var mysql = require("mysql");
-var prompt = require('prompt');
 var Table = require('cli-table');
 
 // Connection information for the SQL database
@@ -57,28 +57,26 @@ connection.query("SELECT * FROM products", function(err, res) {
     start();
 });
 
-// Function which starts the prompt
+// Function which starts the purchase process
 function start() {
-  // Prompy begins the purchase process
-  prompt.start();
-    // Ask the user for the ID of the item they would like to purchase
-    console.log("Which of our items would you like to purchase?");
-
-    // Prompt user
-    prompt.get(["desiredItemID"], function (err, result) {
-            
-      // Store the result in a variable
-      var desiredItemID = result.desiredItemID
-
-    // Then ask the user the quantity they would like
-    console.log("How many would you like to purchase?")
-
-    // Prompt user
-    prompt.get(["desiredItemQuantity"], function (err, result) {
-
-      // Store the result in a variable
-      var desiredItemQuantity = result.desiredItemQuantity;
-
+    // Begin inquirer to ask the user what they want to purchase
+    inquirer
+    .prompt([
+      {
+        name: "desiredItemID",
+        type: "input",
+        message: "Which of our items would you like to purchase?"
+      },
+      {
+        name: "desiredItemQuantity",
+        type: "input",
+        message: "How many would you like to purchase?"
+      }])
+      .then(function(answer) {
+      // Store the item in a variable
+      var desiredItemID = answer.desiredItemID
+      // Store the quantity in a variable
+      var desiredItemQuantity = answer.desiredItemQuantity;
       // Check our SQL databse to see if we have enough in stock for the user to purchase.
       connection.query("SELECT stock_quantity FROM products WHERE ?", [{item_id: desiredItemID}], function(err, results) {
 
@@ -135,6 +133,5 @@ function start() {
         }
 
       }) // End of SQL database inquiry
-    }); // End of Quantity prompt
-    }); // End of Item ID prompt
+    }) // End of answer function
 } // End of start function
