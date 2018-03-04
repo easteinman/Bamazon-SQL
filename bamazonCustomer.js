@@ -119,7 +119,7 @@ function start() {
                 // Create a variable to hold that price
                 var desiredItemPrice = results[0].price;
                 // Equation to calulate the purchase total
-                purchaseTotal = desiredItemPrice * desiredItemQuantity;
+                purchaseTotal = (desiredItemPrice * desiredItemQuantity).toFixed(2);;
 
                 console.log("==========================================================");
 
