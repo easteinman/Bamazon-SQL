@@ -81,8 +81,8 @@ This file is can be cloned to your laptop or setup manually using the `bamazon.s
 	![Item ID](https://lh3.googleusercontent.com/5iGX8xOBau3JTMI5PGvxPGk3jHfH3dtZt1CC6QYE5uNKsfKB7sEcVnWZcbT72YxpHmDdY4qAvlA)
 3. The user will then enter the `Item ID` for the item they would like to purchase. This is followed by the question:
 	> How many would you like to purchase?
-	
-	![Quantity](https://lh3.googleusercontent.com/aoEezUK7YmWOaOnbqlPTiPOte3RFMzFpVVDPnYNlpcGiP5bpj0KNSDxucDo7NV-Xtuzw0MfEfCI)
+
+	![enter image description here](https://lh3.googleusercontent.com/gV4BfIW3FOAnp1AnbjpKeoZ9kDpqzGwRynWDz4WsolhNL_k3uyKkAbmsEsO1rm25W3m0xdxCkn8)
 4. After entering a quantity higher than what is in stock, the application notifies the user and asks them to come back again. The connection is ended.
 
 	![Unsuccessful Quantity Result](https://lh3.googleusercontent.com/qCErrE-R6sMEu9K_FlC9nQHhggZ0LiHn4em05EkKSP0nFGeONfaJj74zoHm9WLzPM7OaNwrH1EE)
