@@ -78,7 +78,7 @@ This file is can be cloned to your laptop or setup manually using the `bamazon.s
 
 	> Which of our items would you like to purchase?
 	
-	![Item ID](https://lh3.googleusercontent.com/5iGX8xOBau3JTMI5PGvxPGk3jHfH3dtZt1CC6QYE5uNKsfKB7sEcVnWZcbT72YxpHmDdY4qAvlA)
+	![enter image description here](https://lh3.googleusercontent.com/5sWMja40Tlohdl6-JAHX7S1cupUSeXKHMNHGgb11jK5v-U45SQPSybwQK50dswdGyVqobgXeZ2Y)
 3. The user will then enter the `Item ID` for the item they would like to purchase. This is followed by the question:
 	> How many would you like to purchase?
 
