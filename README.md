@@ -44,9 +44,9 @@ This file is can be cloned to your laptop or setup manually using the `bamazon.s
 ## Demos
 ### Quick Links
 
- - [Successful Transaction](#Successful-Transaction)
- - [Unsuccessful Transaction due to Unavailable Quantity](#Unsuccessful-Transaction-due-to-Unavailable-Quantity)
- - [Unsuccessful Transaction due to Invalid Item ID](#Unsuccessful-Transaction-due-to-Invalid-Item-ID)
+ - [Successful Transaction](https://github.com/ericsteinman/Bamazon-SQL#successful-transaction)
+ - [Unsuccessful Transaction due to Unavailable Quantity](https://github.com/ericsteinman/Bamazon-SQL#unsuccessful-transaction-due-to-unavailable-quantity)
+ - [Unsuccessful Transaction due to Invalid Item ID](https://github.com/ericsteinman/Bamazon-SQL#unsuccessful-transaction-due-to-invalid-item-id)
  
 
 
